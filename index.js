@@ -3,12 +3,20 @@ const express = require("express")
 const cors = require("cors")
 const app = express()
 const port = process.env.PORT || 9000
+const path = require("path")
+
+const secret = process.env.PASS
 
 app.use(cors())
 app.use(express.json())
+app.use(express.static(path.join(__dirname,"client/build")))//handles homepage
 
 app.use("/api/*",(_,res)=>{
     res.json({data:"The API is working!"})
+})
+
+app.use("*",(_,res)=>{ //handles incorrect endpoints
+    res.sendFile(path.join(__dirname,"client/build","index.html"))
 })
 
 app.listen(port,()=>{
